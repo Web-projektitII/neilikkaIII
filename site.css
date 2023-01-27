@@ -1,0 +1,97 @@
+* {
+    font-family:Arial;
+    box-sizing: border-box;
+    }
+  
+  body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      margin:0;
+      }
+      
+  .container {
+      flex: 1;
+      margin: 10px 10px;
+      /*Tyhjäksi jätettävän tilan osuus  
+      flex-grow: 1;
+      Elementtien sopeutus käytettävissä olevaan tilaan 
+      flex-shrink: 1;
+      Elementin lähtökoko
+      flex-basis: auto;
+      */
+      }
+  
+  footer {
+    width:100%;
+    padding:10px 0;
+    text-align:center;
+    color:#fff;
+    background-color:#04AA6D;
+
+    }
+  
+  .nowrap {
+    white-space:nowrap;
+    overflow:auto;
+  } 
+
+  ul {
+    margin:0;
+    padding:4px;
+    border:1px solid #808080;
+    list-style: none;
+  }
+
+  li {
+    margin-bottom:4px;
+  }
+
+ .label {
+  display:block;  
+  }
+
+  #yhteydenotto input[type="text"] {
+  width:250px;
+  }
+
+  #yhteydenotto input,textarea {
+  margin-bottom:4px;
+  font-size:1.0rem;
+  }
+
+  #yhteydenotto button {
+  float:right;
+  margin-right:20%;
+  }
+
+  @media (min-width: 576px) {
+  form {
+  line-height:1.75em; 
+  max-width: 576px; 
+  }
+
+  .label {
+  display:inline-block;  
+  min-width:150px;
+  }
+
+  .label-textarea {
+  vertical-align:top;   
+  }
+
+  textarea {
+  margin-top:4px;
+  }  
+  }
+
+  @media (min-width: 768px) {
+  }
+    
+  @media (min-width: 992px) {
+  }
+  
+  
+  @media (min-width: 1200px) {
+  }
+  
