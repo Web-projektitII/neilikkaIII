@@ -1,0 +1,25 @@
+
+.invalid-feedback {
+  display:block;
+}
+
+:focus:invalid ~ .invalid-feedback {
+  display:block;
+  color:red;
+}
+
+
+@media (min-width: 576px) {
+  .invalid-feedback {margin-left:154px;}
+  }
+
+  @media (min-width: 768px) {
+  }
+    
+  @media (min-width: 992px) {
+  }
+  
+  
+  @media (min-width: 1200px) {
+  }
+  

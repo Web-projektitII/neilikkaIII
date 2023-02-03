@@ -1,9 +1,13 @@
+<?php if (!session_id()) session_start();
+$loggedIn = $_SESSION['loggedIn'] ?? false;
+?>
 <head>
     <meta charset="utf-8">
     <title>Neilikka-mallisovellus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="site.css">
     <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="errors.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
     <link rel="icon" type="image/x-icon" href="./globe32.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +31,15 @@
   <a href="tuotteet.php">Tuotteet</a>
   <a href="yhteydenotto.php">Ota yhteyttä</a>
   <a href="yritys.php">Tietoa meistä</a>
+  <?php
+  if ($loggedIn) {
+  echo '<a href="profiili.php">Profiili</a>';
+  echo '<a class="nav-suojaus" href="poistu.php">Poistu</a>';
+  }
+  else {
+  echo '<a class="nav-suojaus" href="kirjautuminen.php">Kirjautuminen</a>?>';
+  }
+  ?>
   <a href="javascript:void(0);" class="icon" onclick="menutoggle()">
   <i class="fa fa-bars"></i>
   </a>

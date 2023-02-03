@@ -1,17 +1,16 @@
 <?php
-/* Ajax-versio */
 if (isset($_POST['painike'])){
-  /*foreach($_POST as $key => $value){
+  foreach($_POST as $key => $value){
     echo "$key:$value<br>";
-    }*/
-    echo json_encode($_POST);
-    exit;  
+    }
+  //header('location: index.php');
+  //exit;  
 }
 ?>
 <!DOCTYPE html>
 <html lang="fi">
 <?php
-include('header.php')
+include('header.php');
 ?>
 <div class="container">
 <h1>Ota yhteyttä</h1> 
@@ -23,7 +22,7 @@ include('header.php')
 - alla olevalla lomakkeella<br>
 </p>
 <p id="tulos"></p>
-<form id="yhteydenotto" method="POST" novalidate class="needs-validation" onsubmit="tallennus(event)">
+<form id="yhteydenotto" method="POST" novalidate>
 <fieldset>
 <legend>Yhteydenottopyyntö</legend>
 <label class="label" for="nimi">Nimi</label>

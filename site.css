@@ -51,7 +51,7 @@
   display:block;  
   }
 
-  #yhteydenotto input[type="text"] {
+  #yhteydenotto input[type="text"],input[type="email"] {
   width:250px;
   }
 

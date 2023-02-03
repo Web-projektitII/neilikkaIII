@@ -51,8 +51,12 @@
       text-align: left;
     }
   
+    
+
+
   @media screen and (min-width:767px) {
   .topnav a:not(:first-child) {display: block;}    
   .topnav a.icon {display: none;}
+  .topnav .nav-suojaus {float:right;}
   }
   
