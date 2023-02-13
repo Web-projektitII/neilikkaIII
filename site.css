@@ -49,14 +49,33 @@
 
  .label {
   display:block;  
+  margin-top:4px;
   }
+
+.nowrap {
+  white-space:nowrap;
+  overflow:hidden;
+}  
+
+fieldset, legend {
+  all: revert;
+ }
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #aaa!important;
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #aaa;
+}
 
   #yhteydenotto input[type="text"],input[type="email"] {
   width:250px;
   }
 
   #yhteydenotto input,textarea {
-  margin-bottom:4px;
+  /*margin-bottom:4px;*/
   font-size:1.0rem;
   }
 
@@ -67,8 +86,11 @@
 
   @media (min-width: 576px) {
   form {
-  line-height:1.75em; 
-  max-width: 576px; 
+  /*line-height:1.75em; */
+  max-width: 576px;   
+  }
+  input,textarea {
+  margin-top:4px;
   }
 
   .label {
@@ -80,9 +102,6 @@
   vertical-align:top;   
   }
 
-  textarea {
-  margin-top:4px;
-  }  
   }
 
   @media (min-width: 768px) {

@@ -1,12 +1,19 @@
 
-.invalid-feedback {
-  display:block;
-}
-
-:focus:invalid ~ .invalid-feedback {
+.is-invalid ~ .invalid-feedback {
   display:block;
   color:red;
 }
+
+.is-invalid:valid ~ .invalid-feedback {
+  display:none;
+}
+
+/*
+.is-valid:not(:focus):invalid ~ .invalid-feedback {
+  display:block;
+  color:red;
+}
+*/
 
 
 @media (min-width: 576px) {
