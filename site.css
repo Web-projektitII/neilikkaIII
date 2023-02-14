@@ -89,8 +89,9 @@ fieldset, legend {
   /*line-height:1.75em; */
   max-width: 576px;   
   }
+  
   input,textarea {
-  margin-top:4px;
+  /*margin-top:4px;*/
   }
 
   .label {

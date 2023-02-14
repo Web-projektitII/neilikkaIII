@@ -45,10 +45,44 @@ fetch("yhteydenotto.php",{
 return false
 }
 
+const poista_is_invalid = event => {
+  let element = event.target;
+  /*document.querySelectorAll("input[type='radio']").forEach(radio => {
+        if (radio.classList.contains('is-invalid')) {     
+          radio.classList.remove("is-invalid");    
+          radio.removeEventListener("input", poista_is_invalid);     
+          } 
+        }) */
+  if (element.classList.contains('is-invalid')){
+    element.classList.remove("is-invalid");    
+    element.removeEventListener("input", poista_is_invalid);
+    }
+  console.log("sisältääkö "+element.name+" is_invalid-luokan: ",element.classList.contains('is-invalid'))
+  }    
+
+const tarkista_salasana = () => {
+  let password = document.querySelector("#password");
+  let confirm_password = document.querySelector("#confirm_password");
+  if (password.value != confirm_password.value){
+     confirm_password.setCustomValidity('Salasanat eivät täsmää.')
+     }
+  else {
+    confirm_password.setCustomValidity('')
+    }  
+  }
+
+
+
 (() => {
   'use strict'
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
-   document.querySelectorAll(".is-invalid").forEach(
+  
+  /*
+  password.onchange = tarkista_salasana;
+  confirm_password.onchange = tarkista_salasana;  
+  */
+
+  document.querySelectorAll(".is-invalid").forEach(
     element => element.addEventListener("input", poista_is_invalid)
     ) 
   
