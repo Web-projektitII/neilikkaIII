@@ -64,11 +64,12 @@ const tarkista_salasana = () => {
   let password = document.querySelector("#password");
   let confirm_password = document.querySelector("#confirm_password");
   if (password.value != confirm_password.value){
-     confirm_password.setCustomValidity('Salasanat eivät täsmää.')
+     confirm_password.setCustomValidity('Salasanat eivät täsmää.');
      }
   else {
-    confirm_password.setCustomValidity('')
+    confirm_password.setCustomValidity('');
     }  
+  //confirm_password.reportValidity();
   }
 
 

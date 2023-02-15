@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fi">
 <?php
+$palvelin = $_SERVER['HTTP_HOST'];
+$palvelu = "neilikka";
 $title = "Rekisteröityminen";
 $result = false;
 $virheet = [];
@@ -10,8 +12,28 @@ $patterns['lastname'] = $patterns['firstname'];
 $patterns['mobilenumber'] = "/^[0-9]{7,15}$/";
 $patterns['email'] = "/^[\w]+[\w.+-]*@[\w-]+(\.[\w-]{2,})?\.[a-zA-Z]{2,}$/";
 
+/*
+$validityProperties = ['customError','patternMismatch','rangeOverflow','rangeUnderflow',
+                       'stepMismatch','tooLong','typeMismatch','valueMissing','valid'];
+
+function validationMessage($kentta,$virhetyyppi){
+$validationMessage['customError'] = "Virheellinen $kentta";
+$validationMessage['patternMismatch'] = "Virheellinen $kentta";
+$validationMessage['rangeOverflow'] = "Liian suuri $kentta";
+$validationMessage['rangeUnderflow'] = "Liian pieni $kentta";
+$validationMessage['stepMismatch'] = "Väärän kokoinen muutos";
+$validationMessage['tooLong'] = "Liian pitkä $kentta";
+$validationMessage['typeMismatch'] = "Väärän tyyppinen $kentta";
+$validationMessage['valueMissing'] = "$kentta puuttuu";
+$validationMessage['valid'] = "Oikea arvo";
+return $validationMessage[$virhetyyppi];
+}
+*/
+
 include('tietokantarutiinit.php');
 include('header.php');
+include('debuggeri.php');
+include('posti.php');
 
 function nayta($kentta){
     echo (!isset($GLOBALS['virheet'][$kentta]) and isset($_POST[$kentta])) ? $_POST[$kentta] : ""; 
@@ -32,10 +54,10 @@ function validoi($kentta,$arvo){
    $patterns = $GLOBALS['patterns'];
    $virhe = false;
    if ($kentta == 'email' && !filter_var($arvo, FILTER_VALIDATE_EMAIL)) $virhe = 'email';
-   elseif (!is_array($arvo) && !preg_match($patterns[$kentta],$arvo)) $virhe = 'match'; 
+   elseif (!is_array($arvo) && !preg_match($patterns[$kentta],$arvo)) $virhe = 'patternMismatch'; 
    elseif (is_array($arvo)){
       foreach ($arvo as $value){
-         if (!preg_match($patterns[$kentta],$value)) $virhe = 'match';
+         if (!preg_match($patterns[$kentta],$value)) $virhe = 'patternMismatch';
          }
       }
    return $virhe;
@@ -43,8 +65,12 @@ function validoi($kentta,$arvo){
      
 if (isset($_POST['painike'])){
    $kentat = ['firstname','lastname','email','mobilenumber','password'];
+   $kentat_suomi = ['etunimi','sukunimi','sähköpostiosoite','matkapuhelinnumero','salasana'];
    $pakolliset = ['firstname','lastname','email','mobilenumber','password'];
-           
+   
+   //$query_email = "SELECT 1 FROM users WHERE email = '$email'";
+
+
    foreach ($kentat as $kentta) {
       $$kentta = $_POST[$kentta] ?? '';
       if (!is_array($$kentta)){
@@ -55,23 +81,35 @@ if (isset($_POST['painike'])){
             $$kentta[$key] = $yhteys->real_escape_string(strip_tags(trim($value)));
             }
          }
-      if (!$$kentta && in_array($kentta,$pakolliset)) $virheet[$kentta] = 'puuttuu';
+      if (!$$kentta && in_array($kentta,$pakolliset)) $virheet[$kentta] = 'valueMissing';
       elseif ($virhe = validoi($kentta,$$kentta)) $virheet[$kentta] = $virhe;
       }
       
-      //$$kentta = implode(",",$$kentta);    
-      $created = date("Y-m-d H:i:s",time());
-      $kentat[] = 'created';    
-      $str_kentat = implode(", ",$kentat);
+      
       //echo "str_kentat:$str_kentat<br>";
            
       if (!$virheet) {
-         $query = "INSERT INTO users ($str_kentat) VALUES ('$firstname', '$lastname', '$email', '$mobilenumber', '$password', '$created')";
+         $token = md5(rand().time());
+ 
+         if (is_array($$kentta)) $$kentta = implode(",",$$kentta);    
+         $created = date("Y-m-d H:i:s",time());
+         $kentat[] = 'token';  
+         $kentat[] = 'created';  
+         $str_kentat = implode(", ",$kentat);
+         
+         $password_hash = password_hash($password, PASSWORD_DEFAULT);
+         $query = "INSERT INTO users ($str_kentat) VALUES ('$firstname', '$lastname', '$email', '$mobilenumber', '$password_hash', '$token', '$created')";
          //echo "$query<br>";
          //exit;
          $result = $yhteys->query($query);
          $lisattiin = $yhteys->affected_rows;
-         }   
+         if ($result) {
+            $msg = "Vahvista sähköpostiosoitteesi:<br><br>";
+            $msg.= "<a href='http://$palvelin/$palvelu/verification.php?token=$token'>Vahvista sähköpostiosoite</a>";
+            $subject = "Vahvista sähköpostiosoite";
+            $lahetetty = posti($email,$msg,$subject);
+         }
+      }   
    }
 ?>
 <div class="container">
@@ -139,7 +177,10 @@ if (isset($_POST['painike'])){
     }
   else {
     echo "<div class=\"alert alert-success\" role=\"alert\">";
-    echo "Lisättiin: $lisattiin uusi käyttäjä<br></div>";   
+    if ($lahetetty)
+      echo "Kiitos rekisteröitymisestä, seuraavaksi vahvista sähköpostiosoitteesi sinulle lähetetystä linkistä.<br></div>";   
+    else 
+      echo "Lisättiin: $lisattiin uusi käyttäjä<br></div>";   
     echo "<div class=\"alert alert-info\" role=\"alert\">";
     echo $query;
     echo "</div>";

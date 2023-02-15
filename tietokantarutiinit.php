@@ -6,8 +6,8 @@ else {
   }
 $palvelin = "localhost";
 $tietokanta = "neilikka";
-$kayttaja = $db_kayttajatunnus;  
-$salasana = $db_salasana;
+$kayttaja = $db_username_local;
+$salasana = $db_password_local;
 
 function db_connect(){
 static $yhteys;
